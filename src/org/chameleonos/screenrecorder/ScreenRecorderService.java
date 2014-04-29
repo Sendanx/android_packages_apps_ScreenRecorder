@@ -111,14 +111,11 @@ public class ScreenRecorderService extends IntentService
         final ContentResolver resolver = getContentResolver();
         final Resources res = getResources();
 
-        final int[] dimensions = getVideoDimensions(res, display);
-        final int bitRate = Settings.System.getInt(resolver,
+        int[] dimensions = getVideoDimensions(res, display);
+        int bitRate = Settings.System.getInt(getContentResolver(),
                 Settings.System.SCREEN_RECORDER_BITRATE,
                 res.getInteger(R.integer.config_screenRecorderFramerate));
-        final boolean recordAudio = Settings.System.getInt(resolver,
-                Settings.System.SCREEN_RECORDER_RECORD_AUDIO, 0) == 1;
-
-        sScreenRecorder.init(rotation, dimensions[0], dimensions[1], bitRate, 0, recordAudio);
+        sScreenRecorder.init(rotation, dimensions[0], dimensions[1], bitRate, 0);
         File f = new File(RECORDER_PATH);
         if (!f.exists()) {
             if (!f.mkdir()) {
@@ -143,12 +140,7 @@ public class ScreenRecorderService extends IntentService
     /* Screen recorder callbacks */
     @Override
     public void onRecordingStarted() {
-        final boolean recordAudio = Settings.System.getInt(getContentResolver(),
-                Settings.System.SCREEN_RECORDER_RECORD_AUDIO, 0) == 1;
-        // only play the start recording sound when only video is being recorded
-        // otherwise the sound will be picked up by the mic and included which
-        // isn't really desirable.
-        if (!recordAudio) sActionSound.play(MediaActionSound.START_VIDEO_RECORDING);
+        sActionSound.play(MediaActionSound.START_VIDEO_RECORDING);
         postRecordingNotification();
     }
 
