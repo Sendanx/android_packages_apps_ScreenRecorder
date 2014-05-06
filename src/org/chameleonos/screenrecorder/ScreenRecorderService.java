@@ -278,7 +278,7 @@ public class ScreenRecorderService extends IntentService
         }
         int[] dimensions = parseDimensions(dimensionString);
         if (dimensions == null) {
-            dimensions = new int[] {720, 1280};
+            dimensions = new int[] {1080, 1920};
         }
 
         // if rotation is Surface.ROTATION_0 and width>height swap
